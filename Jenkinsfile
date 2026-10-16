@@ -37,17 +37,17 @@ pipeline {
         }
 
         stage('Load Image into Minikube') {
-            steps {
-                sh '''
-                    minikube image load ${IMAGE_NAME}:${BUILD_NUMBER}
-                '''
-            }
-        }
+    steps {
+        sh '''
+            sudo -n -u rahul /usr/local/sbin/load-devops-app-image \
+              devops-app:${BUILD_NUMBER}
+        '''
+    }
+}
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh '''
-                    kubectl set image deployment/devops-app \
+                sh '''                    kubectl set image deployment/devops-app \
                       devops-app=${IMAGE_NAME}:${BUILD_NUMBER}
 
                     kubectl rollout status deployment/devops-app \
